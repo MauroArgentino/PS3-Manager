@@ -1,12 +1,12 @@
 <?php
 
 
-include('mysql_conf.php');
-include('time_calc.php');
+require_once('mysql_conf.php');
+require_once('time_calc.php');
 
 $id = $_GET['id'];
 
-	
+
 
 // FUNCTION TO CONVERT TO READABLE FILESIZE
 
@@ -48,37 +48,37 @@ $id = $_GET['id'];
     return $result;
 }
 
-	
+
     if (!$db = new mysqli(DB_SERVER, DB_USER, DB_PASSWORD, DB_NAME)) {
         die($db->connect_errno.' - '.$db->connect_error);
     }
 
-	
-	
+
+
 
 $game_record_html = file_get_contents('html_files/game_record.html');
 
 if($id == "random") {
-	
+
 	$sql = "SELECT id FROM games";
 	$result = $db->query($sql) or die($mysql->error);
 	$id = rand(1,$result->num_rows);
-	
+
 }
 
     $sql = "SELECT id, name, time_played, isoname, covername, numplayed, lastplayed FROM games WHERE ID='".$id."'";
 	$sql_details = "SELECT name,category,developer,publisher,score,rlsdate,description FROM game_details WHERE ID='".$id."'";
-	
+
     $result = $db->query($sql) or die($mysql->error);
-	
-	
-	
+
+
+
     if ($result->num_rows > 0) {
         while ($obj = $result->fetch_object()) {
 
             $raw_name = $obj->name;
             $id = $obj->id;
-			
+
 			$numplayed = $obj->numplayed;
 			$lastplayed= $obj->lastplayed;
             $gamename = preg_replace('~\[(.+?)\]~', "", $raw_name);
@@ -88,21 +88,21 @@ if($id == "random") {
 			$time_played = secondsToTime($obj->time_played);
 			$isofilesize = filesize($obj->isoname);
 			$isofilesize = FileSizeConvert($isofilesize);
-			
-            
+
+
 			$game_record_html = str_replace("%ISO_NAME%",$isoname,$game_record_html);
 			$game_record_html = str_replace("%GAME_COVER%",$covername,$game_record_html);
 			$game_record_html = str_replace("%NUM_PLAYED%",$numplayed,$game_record_html);
 			$game_record_html = str_replace("%LAST_PLAYED%",$lastplayed,$game_record_html);
 			$game_record_html = str_replace("%TIME_PLAYED%",$time_played,$game_record_html);
 			$game_record_html = str_replace("%ISO_SIZE%",$isofilesize,$game_record_html);
-			
-		
+
+
         }
 		$result_details = $db->query($sql_details) or die($mysql->error);
-		
+
 		while ($obj = $result_details->fetch_object()) {
-			
+
 			//$gamename = $obj->name;
 			$category = $obj->category;
 			$developer = $obj->developer;
@@ -110,8 +110,8 @@ if($id == "random") {
             $rlsdate = $obj->rlsdate;
 			$score = $obj->score;
 			$description = $obj->description;
-			
-			
+
+
 			$game_record_html = str_replace("%GAME_NAME%",$gamename,$game_record_html);
 			$game_record_html = str_replace("%CATEGORY%",$category,$game_record_html);
 			$game_record_html = str_replace("%DEVELOPER%",$developer,$game_record_html);
@@ -119,7 +119,7 @@ if($id == "random") {
 			$game_record_html = str_replace("%RLS_DATE%",$rlsdate,$game_record_html);
 			$game_record_html = str_replace("%SCORE%",$score,$game_record_html);
 			$game_record_html = str_replace("%GAME_DESC%",$description,$game_record_html);
-			
+
 		}
 		file_put_contents('html_files/complete_game_record.html',$game_record_html);
     }

@@ -1,7 +1,7 @@
 <?php
 
 
-include('config.php');
+require_once('config.php');
 
 $now = date('d-m-Y H:i:s');
 $row_cnt = 0;
@@ -13,19 +13,19 @@ if (!$db = new mysqli(DB_SERVER, DB_USER, DB_PASSWORD, DB_NAME)) {
     $sql = "SELECT name FROM games";
     $result = $db->query($sql) or die($mysql->error);
 	$row_cnt = $result->num_rows;
-	
+
 // CHECKING IF WEBMAN IS ONLINE
 
 function ping($host, $port, $timeout)
 {
     $tB = microtime(true);
     $fP = fSockOpen($host, $port, $errno, $errstr, $timeout);
-    if (!$fP) { 
-		return "down"; 
+    if (!$fP) {
+		return "down";
 	}
     $tA = microtime(true);
     return "up";
-	
+
 }
 
 $ps3_up = ping($ps3_ip, 80,2);
@@ -112,10 +112,10 @@ $ps_status = "<table >";
 
 
  if($ps3_up == "down") {
-		
+
 		$ps_status .="
 		<tr><td style='color: #3399AA;'><b>PS3 System</b></td><td style='color: red; font-weight: bold; text-align: center; width: auto;'>OFFLINE</td></tr>";
-        
+
         $cpu_temp = "UNAVAILABLE";
         $disk_int_free = "UNAVAILABLE";
         $disk_ext_free = "UNAVAILABLE";
@@ -137,26 +137,26 @@ $ps_status = "<table >";
 	$ps_status .= "<tr><td><font color='#3399AA'><b>CPU Temp</b></font></td><td style='color: black; text-align: center;  width: auto;'>".$cpu_temp."</td>";
 	$ps_status .= "<tr><td><font color='#3399AA'><b>Free RAM</b></font></td><td style='color: black; text-align: center;  width: auto;'>".$memory_free[0]."</td>";
     $ps_status .= "<tr><td><font color='#3399AA'><b>HD Internal</b></font></td><td style='color: black; text-align: center;  width: auto;'>".$disk_int_free.$mb_free."</td></tr>";
-    
+
 	if ($disk_ext_free != '') {
 		$ps_status .= "<tr><td><font color='#3399AA'><b>HD USB</b></font></td><td style='color: black; text-align: center;  width: auto;'>".$disk_ext_free.$mb_free."</td></tr>";
 	}
-	
+
 	if($mounted_game != '') {
 		$ps_status .= "<tr id='game_mounted'><td><font color='#3399AA'><b>Mounted Game</b></font></td><td style='color: black; text-align: center; font-size: normal; padding-right: 10px; width: auto;'>".$mounted_game."</td></tr>";
-		if($play_time != '')  { 
+		if($play_time != '')  {
 			$ps_status .= "<tr id='time_play'><td><font color='#3399AA'><b>Game Play Time</b></font></td><td style='color: black; text-align: center; width: auto;'>".$play_time."</td></tr>";
 		}
 		else{
 			$ps_status .= "<tr id='time_play'><td><font color='#3399AA'><b>Game Play Time</b></font></td><td style='color: black; text-align: center; width: auto;'>&#9737; 0d 00:00:00</td></tr>";
 		}
 	}
-	
-	
-	
+
+
+
 	$ps_status .= "<tr><td><font color='#3399AA'><b>Total Games</b></font></td><td style='color: black; text-align: center;  width: auto;'>".$row_cnt."</td></tr>";
 	$ps_status .= "<tr><td><font color='#3399AA'><b>Last Check</b></font></td><td style='color: black; text-align: center;  width: auto;'>".date('d-m-Y H:i:s')."</td></tr>";
-	
+
 	echo $row_cnt;
 file_put_contents($local_path."/ps3_status_output.txt", $ps_status);
 
