@@ -1,69 +1,82 @@
 <?php
 
-require_once ('config.php');
+    require_once ( 'config.php' );
 
+    $servername = $mysql_host;
 
-$servername = $mysql_host;
-$username = $mysql_user;
-$password = $mysql_password;
-$dbname = $mysql_db;
+    $username = $mysql_user;
 
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+    $password = $mysql_password;
 
-date_default_timezone_set('Europe/Amsterdam');
-$directory = $ps3_folder;
-$scanned_directory = array_diff(scandir($directory), array('..', '.'));
-$x = 0;
+    $dbname = $mysql_db;
 
-foreach ($scanned_directory as $value) {
+    // Create connection
 
-// Renaming Files;
+    $conn = new mysqli( $servername, $username, $password, $dbname );
 
-$newfile =  str_replace(" ", '_', $value);
-$newfile =  str_replace("'", '', $newfile);
-$newfile =  str_replace("&", '', $newfile);
+    // Check connection
 
+    if ( $conn->connect_error )
+    {
+        die( 'Connection failed: ' . $conn->connect_error );
+    }
 
-rename($directory."/".$value, $directory."/".$newfile);
+    date_default_timezone_set( 'Europe/Amsterdam' );
 
-    
-    if  (strpos($value, 'iso') AND strpos($newfile, 'CONVERSION') === false) {
+    $directory = $ps3_folder;
 
-        $game_name = str_replace(".iso", "", $newfile);
-        $sql = "SELECT * FROM `games` WHERE `name` = '".$game_name."';";
-        echo $sql."\n";
-        $result = $conn->query($sql);
+    $scanned_directory = array_diff( scandir( $directory ), array( '..', '.' ) );
 
-        if ($result->num_rows > 0) {
-               echo "Record ".$game_name." already exists"."\n\n";
-        } else {
-        
+    $x = 0;
 
-           $sql = "INSERT INTO `games`(`name`, `isoname`, `covername`,`dateadded`) VALUES ('".$game_name."','".$directory."/".$newfile."','".$directory."/".$newfile.".jpg',CURRENT_TIMESTAMP);";
-           echo $sql."\n";
-            if ($conn->query($sql) === TRUE) {
-             echo $game_name." record created successfully \n\n";
-           }
+    foreach ( $scanned_directory as $value )
+    {
+        // Renaming Files;
 
-            else {
-               echo "Error: " . $sql . " " . $conn->error."\n\n";
-           }
+        $newfile =  str_replace( ' ', '_', $value );
 
+        $newfile =  str_replace( "'", '', $newfile );
+
+        $newfile =  str_replace( '&', '', $newfile );
+
+        rename( $directory . '/' . $value, $directory . '/' . $newfile );
+
+        if  ( strpos( $value, 'iso' ) AND strpos( $newfile, 'CONVERSION' ) === false )
+        {
+            $game_name = str_replace( '.iso', '', $newfile );
+
+            $sql = "SELECT * FROM `games` WHERE `name` = '" . $game_name . "';";
+
+            echo $sql . '\n';
+
+            $result = $conn->query( $sql );
+
+            if ( $result->num_rows > 0 )
+            {
+                echo 'Record ' . $game_name . ' already exists' . '\n\n';
+            }
+            else
+            {
+                $sql = "INSERT INTO `games`(`name`, `isoname`, `covername`,`dateadded`) VALUES ('" . $game_name . "','" . $directory . '/' . $newfile . "','" . $directory . '/' . $newfile . ".jpg',CURRENT_TIMESTAMP);";
+
+                echo $sql . '\n';
+
+                if ( $conn->query( $sql ) === TRUE )
+                {
+                    echo $game_name . ' record created successfully \n\n';
+                }
+                else
+                {
+                    echo 'Error: ' . $sql . ' ' . $conn->error . '\n\n';
+                }
+            }
         }
     }
-}
 
+    $conn->close();
 
-$conn->close();
+    // ADDING DETAILS TO game_details
 
-// ADDING DETAILS TO game_details
-
-require_once('metacritic.php');
-
+    require_once( 'metacritic.php' );
 
 ?>

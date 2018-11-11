@@ -1,7 +1,7 @@
 <?php
 
-$order = $_GET['order'];
+$order = $_GET[ 'order' ];
 
-file_put_contents("selector.txt",$order);
+file_put_contents( 'selector.txt', $order );
 
 ?>

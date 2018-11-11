@@ -22,7 +22,7 @@
 
     $x = 0;
 
-    $now = date( "F j, Y, g:i a" );
+    $now = date( 'F j, Y, g:i a' );
 
     // USB EXTERNAL GAMEDATA CALL
 
@@ -32,24 +32,24 @@
 
     $command = isset( $_GET[ 'command' ] ) ? htmlspecialchars( $_GET[ 'command' ] ) : null;
 
-    if ( $command == "shutdown" )
+    if ( $command == 'shutdown' )
     {
-        $web_call_gamedata = file_get_contents( "http://".$ps3_ip."/shutdown.ps3" );
+        $web_call_gamedata = file_get_contents( 'http://' . $ps3_ip . '/shutdown.ps3' );
 
-        //$update_status = file_get_contents( "http://".$_SERVER['SERVER_NAME']."/ps3_status_checker.php" );
+        //$update_status = file_get_contents( 'http://' . $_SERVER[ 'SERVER_NAME' ] . '/ps3_status_checker.php' );
 
-        header( "Refresh:0; url=index.php" );
+        header( 'Refresh:0; url=index.php' );
     }
 
     // REBOOT CALL
 
-    if ( $command == "reboot" )
+    if ( $command == 'reboot' )
     {
-        $web_call_gamedata = file_get_contents( "http://".$ps3_ip."/reboot.ps3?quick" );
+        $web_call_gamedata = file_get_contents( 'http://' . $ps3_ip . '/reboot.ps3?quick' );
 
-        //$update_status = file_get_contents( "http://".$_SERVER['SERVER_NAME']."/ps3_status_checker.php" );
+        //$update_status = file_get_contents( 'http://' . $_SERVER[ 'SERVER_NAME' ] . '/ps3_status_checker.php' );
 
-        header( "Refresh:0; url=index.php" );
+        header( 'Refresh:0; url=index.php' );
     }
 
     // MOUNT CALL
@@ -58,31 +58,31 @@
 
     if ( $mount )
     {
-        $sql_call = file_get_contents( "http://".$_SERVER['SERVER_NAME']."/game_update_sql.php?name=".$mount );
+        $sql_call = file_get_contents( 'http://' . $_SERVER[ 'SERVER_NAME' ] . '/game_update_sql.php?name=' . $mount );
 
-        $web_call_unmount = file_get_contents( "http://".$ps3_ip."/mount.ps3/unmount" );
+        $web_call_unmount = file_get_contents( 'http://' . $ps3_ip . '/mount.ps3/unmount' );
 
-        $web_call_mount = file_get_contents( "http://".$ps3_ip."/mount.ps3/net0/PS3ISO/".$mount );
+        $web_call_mount = file_get_contents( 'http://' . $ps3_ip . '/mount.ps3/net0/PS3ISO/' . $mount );
 
-        header( "Refresh:0; url=index.php" );
+        header( 'Refresh:0; url=index.php' );
     }
 
     // UNMOUNT CALL
 
-    if ( $command == "unmount" )
+    if ( $command == 'unmount' )
     {
-        $sql_call = file_get_contents( "http://".$_SERVER['SERVER_NAME']."/game_update_timeplay.php?id=".$id );
+        $sql_call = file_get_contents( 'http://' . $_SERVER[ 'SERVER_NAME' ] . '/game_update_timeplay.php?id=' . $id );
 
-        $web_call_gamedata = file_get_contents( "http://".$ps3_ip."/mount.ps3/unmount" );
+        $web_call_gamedata = file_get_contents( 'http://' . $ps3_ip . '/mount.ps3/unmount' );
 
-        //$update_status = file_get_contents( "http://".$_SERVER['SERVER_NAME']."/ps3_status_checker.php" );
+        //$update_status = file_get_contents( 'http://' . $_SERVER[ 'SERVER_NAME' ] . '/ps3_status_checker.php' );
 
         sleep( 3 );
 
-        header( "Refresh:0; url=index.php" );
+        header( 'Refresh:0; url=index.php' );
     }
 
-    // GETTING STATUS HTML FILE FROM ps3_status_output.php
+    // GETTING STATUS HTML FILE FROM ps3_status_output . php
 
     // CHOOSING HTML FILE ACCORDING TO THE DETECTED DEVICE
 
@@ -99,7 +99,7 @@
         $mobile_page = 1;
     }
 
-    // Any tablet device.
+    // Any tablet device . 
 
     elseif ( $detect->isTablet() )
     {
@@ -119,48 +119,48 @@
 
     $version_writer = file_get_contents( 'js/popups.js' );
 
-    $version_writer = str_replace( "%CURRENT_VERSION%", $app_version, $version_writer );
+    $version_writer = str_replace( '%CURRENT_VERSION%', $app_version, $version_writer );
 
-    file_put_contents( 'js/popups.js',$version_writer );
+    file_put_contents( 'js/popups.js', $version_writer );
 
     $popups_control = file_get_contents( 'html_files/popups.html' );
 
     // INJECTING DATA INTO HTML
 
-    $webpage = str_replace( "%POPUPS_CONTROL%", $popups_control, $webpage ); // <--- THIS ONE FOR FIRST
+    $webpage = str_replace( '%POPUPS_CONTROL%', $popups_control, $webpage ); // <--- THIS ONE FOR FIRST
 
-    $webpage = str_replace( "%GAMES_LIST%", $game_entry, $webpage );
+    $webpage = str_replace( '%GAMES_LIST%', $game_entry, $webpage );
 
-    $webpage = str_replace( "%GAMES_NUMBER%", $games_number, $webpage );
+    $webpage = str_replace( '%GAMES_NUMBER%', $games_number, $webpage );
 
-    $webpage = str_replace( "%GAMES_NUMBER_NP%", $games_number_np, $webpage );
+    $webpage = str_replace( '%GAMES_NUMBER_NP%', $games_number_np, $webpage );
 
-    $webpage = str_replace( "%GLOB_SIZE%", $glob_size, $webpage );
+    $webpage = str_replace( '%GLOB_SIZE%', $glob_size, $webpage );
 
-    $webpage = str_replace( "%NAV_MENU%", $menu_html, $webpage );
+    $webpage = str_replace( '%NAV_MENU%', $menu_html, $webpage );
 
     /// LOADING USB GAME DATA STATUS FILE AND CHANGING MENU
 
-    $game_data_status = file_get_contents( "game_data_status.txt" );
+    $game_data_status = file_get_contents( 'game_data_status.txt' );
 
-    $output_set_gamedata = '<a href="index.php?command=gamedata" onclick="return confirm( \'Change Gamedata Setup ?\' )">'.$game_data_status.'</a>';
+    $output_set_gamedata = '<a href="index.php?command=gamedata" onclick="return confirm( \'Change Gamedata Setup ?\' )">' . $game_data_status . '</a>';
 
     if ( $mobile_page == 1 )
     {
-        $output_set_gamedata = '<a class="links" style="color: black; text-decoration: none" onclick="return confirm( \'Change Gamedata Setup ?\' )" href="index.php?command=gamedata">'.$game_data_status.'</a>';
+        $output_set_gamedata = '<a class="links" style="color: black; text-decoration: none" onclick="return confirm( \'Change Gamedata Setup ?\' )" href="index.php?command=gamedata">' . $game_data_status . '</a>';
     }
 
-    if ( $game_data_status == "NO USB DRIVE" )
+    if ( $game_data_status == 'NO USB DRIVE' )
     {
-        $output_set_gamedata = '<a href="#">'.$game_data_status.'</a>';
+        $output_set_gamedata = '<a href="#">' . $game_data_status . '</a>';
 
         if ( $mobile_page == 1 )
         {
-            $output_set_gamedata = '<a class="links" style="color: black; text-decoration: none"  href="#">'.$game_data_status.'</a>';
+            $output_set_gamedata = '<a class="links" style="color: black; text-decoration: none"  href="#">' . $game_data_status . '</a>';
         }
     }
 
-    $webpage = str_replace( "%GAME_DATA_SETTING%", $output_set_gamedata, $webpage );
+    $webpage = str_replace( '%GAME_DATA_SETTING%', $output_set_gamedata, $webpage );
 
     //SETTING UP SELECT DROP DOWN
 
@@ -168,7 +168,7 @@
 
     $numres_select = isset( $_GET[ 'numres' ] ) ? htmlspecialchars( $_GET[ 'numres' ] ) : null;
 
-    require_once( "selector_html.php" );
+    require_once( 'selector_html.php' );
 
     $head_select = empty( $head_select ) ? null : $head_select;
 
@@ -176,13 +176,13 @@
 
     $html_select = $head_select . $html_select . $tail_select;
 
-    $webpage = str_replace( "%SELECT_ORD%", $html_select, $webpage );
+    $webpage = str_replace( '%SELECT_ORD%', $html_select, $webpage );
 
-    $webpage = str_replace( "%SELECT_NUMRES%", $html_numres, $webpage );
+    $webpage = str_replace( '%SELECT_NUMRES%', $html_numres, $webpage );
 
-    $webpage = str_replace( "%NUM_RES%", $numres, $webpage );
+    $webpage = str_replace( '%NUM_RES%', $numres, $webpage );
 
-    $webpage = str_replace( "%PS3_IP%", $ps3_ip, $webpage );
+    $webpage = str_replace( '%PS3_IP%', $ps3_ip, $webpage );
 
     // RENDERING FINAL HTML PAGE
 

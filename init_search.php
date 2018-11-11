@@ -12,74 +12,74 @@
 
     $numres = isset( $_GET[ 'numres' ] ) ? $_GET[ 'numres' ] : 0;
 
-    if ( $numres == "All" )
+    if ( $numres == 'All' )
     {
-        $limit_str = "LIMIT 1000";
+        $limit_str = 'LIMIT 1000';
     }
     else if ( empty( $numres ) )
     {
-        $numres = "30";
+        $numres = '30';
 
-        $limit_str = "LIMIT " . $numres;
+        $limit_str = 'LIMIT ' . $numres;
     }
     else
     {
-        $limit_str = "LIMIT " . $numres;
+        $limit_str = 'LIMIT ' . $numres;
     }
 
-    //file_put_contents( "selector.txt", $selector );
+    //file_put_contents( 'selector.txt', $selector );
 
-    $sql = "SELECT id, name, isoname, covername, numplayed FROM games ";
+    $sql = 'SELECT id, name, isoname, covername, numplayed FROM games ';
 
-    if ( $selector == "score" )
+    if ( $selector == 'score' )
     {
-        $sql = "SELECT m.id,m.name,m.isoname,m.covername,m.numplayed FROM games AS m JOIN game_details as p ON p.id = m.id ORDER BY p.score DESC ".$limit_str;
+        $sql = 'SELECT m.id,m.name,m.isoname,m.covername,m.numplayed FROM games AS m JOIN game_details as p ON p.id = m.id ORDER BY p.score DESC ' . $limit_str;
     }
 
-    if ( $selector == "numplayed" )
+    if ( $selector == 'numplayed' )
     {
-        $sql_ext = "ORDER BY numplayed DESC ".$limit_str;
+        $sql_ext = 'ORDER BY numplayed DESC ' . $limit_str;
 
-        $sql = $sql.$sql_ext;
+        $sql = $sql . $sql_ext;
     }
 
-    if ( $selector == "lastplayed" )
+    if ( $selector == 'lastplayed' )
     {
-        $sql_ext = "ORDER BY lastplayed DESC ".$limit_str;
+        $sql_ext = 'ORDER BY lastplayed DESC ' . $limit_str;
 
-        $sql = $sql.$sql_ext;
+        $sql = $sql . $sql_ext;
     }
 
-    if ( $selector == "name" )
+    if ( $selector == 'name' )
     {
-        $sql_ext = "ORDER BY name ".$limit_str;
+        $sql_ext = 'ORDER BY name ' . $limit_str;
 
-        $sql = $sql.$sql_ext;
+        $sql = $sql . $sql_ext;
     }
 
-    if ( $selector == "dateadded" )
+    if ( $selector == 'dateadded' )
     {
-        $sql = "SELECT id, name, isoname, covername, numplayed FROM games ORDER BY dateadded DESC ".$limit_str;
+        $sql = 'SELECT id, name, isoname, covername, numplayed FROM games ORDER BY dateadded DESC ' . $limit_str;
     }
 
-    if ( $selector == "rel_date" )
+    if ( $selector == 'rel_date' )
     {
-        $sql = "SELECT m.id,m.name,m.isoname,m.covername,m.numplayed FROM games AS m JOIN game_details as p ON p.id = m.id ORDER BY p.rel_date DESC ".$limit_str;
+        $sql = 'SELECT m.id,m.name,m.isoname,m.covername,m.numplayed FROM games AS m JOIN game_details as p ON p.id = m.id ORDER BY p.rel_date DESC ' . $limit_str;
     }
 
-    if ( $selector == "neverplayed" )
+    if ( $selector == 'neverplayed' )
     {
-        $sql = "SELECT m.id,m.name,m.isoname,m.covername,m.numplayed FROM games AS m JOIN game_details as p ON p.id = m.id where m.numplayed='0' ORDER by p.score DESC ".$limit_str;
+        $sql = "SELECT m.id,m.name,m.isoname,m.covername,m.numplayed FROM games AS m JOIN game_details as p ON p.id = m.id where m.numplayed='0' ORDER by p.score DESC " . $limit_str;
     }
 
-    if ( $selector == "random" )
+    if ( $selector == 'random' )
     {
-        $sql = "SELECT * from ( SELECT m.id,m.name,m.isoname,m.covername,m.numplayed,p.score FROM games AS m JOIN game_details as p ON p.id = m.id ORDER BY rand() ".$limit_str." ) T1 ORDER by score DESC";
+        $sql = 'SELECT * from ( SELECT m.id,m.name,m.isoname,m.covername,m.numplayed,p.score FROM games AS m JOIN game_details as p ON p.id = m.id ORDER BY rand() ' . $limit_str . ' ) T1 ORDER by score DESC';
     }
 
     if ( ! $selector )
     {
-        $sql = "SELECT id, name, isoname, covername, numplayed FROM games ORDER BY lastplayed DESC " . $limit_str;
+        $sql = 'SELECT id, name, isoname, covername, numplayed FROM games ORDER BY lastplayed DESC ' . $limit_str;
     }
 
     if ( ! $db = new mysqli( DB_SERVER, DB_USER, DB_PASSWORD, DB_NAME ) )
@@ -101,13 +101,13 @@
 
             $id = $obj->id;
 
-            $gamename = preg_replace( '~\[(.+?)\]~', "", $raw_name );
+            $gamename = preg_replace( '~\[(.+?)\]~', '', $raw_name );
 
-            $gamename = str_replace( "_"," ", $gamename );
+            $gamename = str_replace( '_', ' ', $gamename );
 
-            $isoname = $raw_name . ".iso";
+            $isoname = $raw_name . '.iso';
 
-            $covername = $raw_name . ".jpg";
+            $covername = $raw_name . '.jpg';
 
             $cover = '<br><br>';
 
@@ -139,4 +139,5 @@
             }
         }
     }
+
 ?>

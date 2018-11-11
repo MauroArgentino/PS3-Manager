@@ -49,30 +49,30 @@
 
     if ( isset( $_GET[ 'numres' ] ) )
     {
-        if ( $numres_select == "30" )
+        if ( $numres_select == '30' )
         {
 
-            $html_numres = '<option value="30" selected="selected">30 results</option><option value="50">50 results</option><option value="100">100 results</option><option value="'.$games_number.'">All results</option>';
+            $html_numres = '<option value="30" selected="selected">30 results</option><option value="50">50 results</option><option value="100">100 results</option><option value="' . $games_number . '">All results</option>';
         }
-        if ( $numres_select == "50" )
+        if ( $numres_select == '50' )
         {
-            $html_numres = '<option value="30">30 results</option><option value="50" selected="selected">50 results</option><option value="100">100 results</option><option value="'.$games_number.'">All results</option>';
+            $html_numres = '<option value="30">30 results</option><option value="50" selected="selected">50 results</option><option value="100">100 results</option><option value="' . $games_number . '">All results</option>';
         }
 
-        if ( $numres_select == "100" )
+        if ( $numres_select == '100' )
         {
 
-            $html_numres = '<option value="30">30 results</option><option value="50">50 results</option><option value="100" selected="selected">100 results</option><option value="'.$games_number.'">All results</option>';
+            $html_numres = '<option value="30">30 results</option><option value="50">50 results</option><option value="100" selected="selected">100 results</option><option value="' . $games_number . '">All results</option>';
         }
 
         if ( $numres_select == $games_number )
         {
-            $html_numres = '<option value="30">30 results</option><option value="50">50 results</option><option value="100">100 results</option><option value="'.$games_number.'" selected="selected">All results</option>';
+            $html_numres = '<option value="30">30 results</option><option value="50">50 results</option><option value="100">100 results</option><option value="' . $games_number . '" selected="selected">All results</option>';
         }
     }
     else if ( empty( $_GET[ 'numres' ] ) )
     {
-        $html_numres = '<option value="30" selected="selected">30 results</option><option value="50">50 results</option><option value="100">100 results</option><option value="'.$games_number.'">All results</option>';
+        $html_numres = '<option value="30" selected="selected">30 results</option><option value="50">50 results</option><option value="100">100 results</option><option value="' . $games_number . '">All results</option>';
     }
 
 ?>
