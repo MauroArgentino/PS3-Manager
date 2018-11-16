@@ -19,9 +19,9 @@
 
     date_default_timezone_set( 'Europe/Amsterdam' );
 
-    $path = $ps3_folder;
+    $directory_path = $ps3_folder;
 
-    $directory_iterator = new RecursiveDirectoryIterator( $path, FilesystemIterator::SKIP_DOTS );
+    $directory_iterator = new RecursiveDirectoryIterator( $directory_path, FilesystemIterator::SKIP_DOTS );
 
     $directory_iterator = new RecursiveIteratorIterator( $directory_iterator );
 
@@ -38,10 +38,10 @@
             continue;
         }
 
-        // echo gmstrftime( '%F' ) . ' - ' . $match[ 1 ] . ' - File ' . $path . DIRECTORY_SEPARATOR . $file_name . PHP_EOL;
-        echo gmstrftime( '%F' ) . ' - ' . $match[ 1 ] . ' - File ' . $path . DIRECTORY_SEPARATOR . $file_name . '<br>';
+        // echo gmstrftime( '%F' ) . ' - ' . $match[ 1 ] . ' - File ' . $directory_path . DIRECTORY_SEPARATOR . $file_name . PHP_EOL;
+        echo gmstrftime( '%F' ) . ' - ' . $match[ 1 ] . ' - File ' . $directory_path . DIRECTORY_SEPARATOR . $file_name . '<br>';
 
-        $path_local_cover = $path . DIRECTORY_SEPARATOR . str_replace( '.iso', '', $file_name ) . '.jpg';
+        $path_local_cover = $directory_path . DIRECTORY_SEPARATOR . str_replace( '.iso', '', $file_name ) . '.jpg';
 
         if ( file_exists( $path_local_cover ) )
         {
