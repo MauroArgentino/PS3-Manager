@@ -1,18 +1,18 @@
 <?php
 
-    require_once( 'mysql_conf.php' );
+    require_once 'mysql_conf.php';
 
-    require_once( 'trim_text.php' );
+    require_once 'trim_text.php';
 
     // LOADING SELECTION DEFAULT
 
-    $selector = isset( $_GET[ 'order' ] ) ? intval( $_GET[ 'order' ] ) : 0;
+    $selector = isset( $_REQUEST[ 'order' ] ) ? intval( $_REQUEST[ 'order' ] ) : 0;
 
     /// NUMBER OF RECORDS
 
-    $numres = isset( $_GET[ 'numres' ] ) ? $_GET[ 'numres' ] : 0;
+    $numres = isset( $_REQUEST[ 'numres' ] ) ? intval( $_REQUEST[ 'numres' ] ) : 0;
 
-    if ( $numres == 'All' )
+    if ( $numres == '1000' )
     {
         $limit_str = 'LIMIT 1000';
     }
@@ -29,65 +29,65 @@
 
     //file_put_contents( 'selector.txt', $selector );
 
-    $sql = 'SELECT id, name, isoname, covername, numplayed FROM games ';
+    $statement = 'SELECT id, name, isoname, covername, numplayed FROM games ';
 
     if ( $selector == 'score' )
     {
-        $sql = 'SELECT m.id,m.name,m.isoname,m.covername,m.numplayed FROM games AS m JOIN game_details as p ON p.id = m.id ORDER BY p.score DESC ' . $limit_str;
+        $statement = 'SELECT m.id,m.name,m.isoname,m.covername,m.numplayed FROM games AS m JOIN game_details as p ON p.id = m.id ORDER BY p.score DESC ' . $limit_str;
     }
 
     if ( $selector == 'numplayed' )
     {
-        $sql_ext = 'ORDER BY numplayed DESC ' . $limit_str;
+        $statement_ext = 'ORDER BY numplayed DESC ' . $limit_str;
 
-        $sql = $sql . $sql_ext;
+        $statement = $statement . $statement_ext;
     }
 
     if ( $selector == 'lastplayed' )
     {
-        $sql_ext = 'ORDER BY lastplayed DESC ' . $limit_str;
+        $statement_ext = 'ORDER BY lastplayed DESC ' . $limit_str;
 
-        $sql = $sql . $sql_ext;
+        $statement = $statement . $statement_ext;
     }
 
     if ( $selector == 'name' )
     {
-        $sql_ext = 'ORDER BY name ' . $limit_str;
+        $statement_ext = 'ORDER BY name ' . $limit_str;
 
-        $sql = $sql . $sql_ext;
+        $statement = $statement . $statement_ext;
     }
 
     if ( $selector == 'dateadded' )
     {
-        $sql = 'SELECT id, name, isoname, covername, numplayed FROM games ORDER BY dateadded DESC ' . $limit_str;
+        $statement = 'SELECT id, name, isoname, covername, numplayed FROM games ORDER BY dateadded DESC ' . $limit_str;
     }
 
     if ( $selector == 'rel_date' )
     {
-        $sql = 'SELECT m.id,m.name,m.isoname,m.covername,m.numplayed FROM games AS m JOIN game_details as p ON p.id = m.id ORDER BY p.rel_date DESC ' . $limit_str;
+        $statement = 'SELECT m.id,m.name,m.isoname,m.covername,m.numplayed FROM games AS m JOIN game_details as p ON p.id = m.id ORDER BY p.rel_date DESC ' . $limit_str;
     }
 
     if ( $selector == 'neverplayed' )
     {
-        $sql = "SELECT m.id,m.name,m.isoname,m.covername,m.numplayed FROM games AS m JOIN game_details as p ON p.id = m.id where m.numplayed='0' ORDER by p.score DESC " . $limit_str;
+        $statement = "SELECT m.id,m.name,m.isoname,m.covername,m.numplayed FROM games AS m JOIN game_details as p ON p.id = m.id where m.numplayed='0' ORDER by p.score DESC " . $limit_str;
     }
 
     if ( $selector == 'random' )
     {
-        $sql = 'SELECT * from ( SELECT m.id,m.name,m.isoname,m.covername,m.numplayed,p.score FROM games AS m JOIN game_details as p ON p.id = m.id ORDER BY rand() ' . $limit_str . ' ) T1 ORDER by score DESC';
+        $statement = 'SELECT * from ( SELECT m.id,m.name,m.isoname,m.covername,m.numplayed,p.score FROM games AS m JOIN game_details as p ON p.id = m.id ORDER BY rand() ' . $limit_str . ' ) T1 ORDER by score DESC';
     }
 
     if ( ! $selector )
     {
-        $sql = 'SELECT id, name, isoname, covername, numplayed FROM games ORDER BY lastplayed DESC ' . $limit_str;
+        $statement = 'SELECT id, name, isoname, covername, numplayed FROM games ORDER BY lastplayed DESC ' . $limit_str;
     }
 
-    if ( ! $db = new mysqli( DB_SERVER, DB_USER, DB_PASSWORD, DB_NAME ) )
+    if ( ! $database = new mysqli( DB_SERVER, DB_USER, DB_PASSWORD, DB_NAME ) )
     {
-        die ( $db->connect_errno . ' - ' . $db->connect_error );
+        die ( $database->connect_errno . ' - ' . $database->connect_error );
     }
 
-    $result = $db->query( $sql ) or die( $mysql->error );
+    $result = $database->query( $statement ) or die( $database->error );
 
     $game_entry = '';
 

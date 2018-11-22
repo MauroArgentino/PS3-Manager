@@ -1,6 +1,6 @@
 <?php
 
-    if ( isset( $_GET[ 'order' ] ) )
+    if ( isset( $_REQUEST[ 'order' ] ) )
     {
         if ( $selector == 'name' )
         {
@@ -47,7 +47,7 @@
         $html_select = '<option value="name">Name</option><option value="score">Score</option><option value="lastplayed" selected="selected">Last Played</option><option value="numplayed">Most Played</option><option value="dateadded">Date Added</option><option value="rel_date">Release Date</option><option value="neverplayed">Never Played</option><option value="random">Random Games</option>';
     }
 
-    if ( isset( $_GET[ 'numres' ] ) )
+    if ( isset( $_REQUEST[ 'numres' ] ) )
     {
         if ( $numres_select == '30' )
         {
@@ -70,7 +70,7 @@
             $html_numres = '<option value="30">30 results</option><option value="50">50 results</option><option value="100">100 results</option><option value="' . $games_number . '" selected="selected">All results</option>';
         }
     }
-    else if ( empty( $_GET[ 'numres' ] ) )
+    else if ( empty( $_REQUEST[ 'numres' ] ) )
     {
         $html_numres = '<option value="30" selected="selected">30 results</option><option value="50">50 results</option><option value="100">100 results</option><option value="' . $games_number . '">All results</option>';
     }

@@ -1,25 +1,25 @@
 <?php
 
-    require_once( 'mysql_conf.php' );
+    require_once 'mysql_conf.php';
 
-    $name = $_GET[ 'name' ];
+    $name = isset( $_REQUEST[ 'name' ] ) ? htmlspecialchars( $_REQUEST[ 'name' ] ) : null;
 
-    if ( !$db = new mysqli( DB_SERVER, DB_USER, DB_PASSWORD, DB_NAME ) )
+    if ( ! $database = new mysqli( DB_SERVER, DB_USER, DB_PASSWORD, DB_NAME ) )
     {
-        die( $db->connect_errno . ' - ' . $db->connect_error );
+        die( $database->connect_errno . ' - ' . $database->connect_error );
     }
 
     $name = str_replace( '.iso', '', $name );
 
-    $sql = "SELECT id, numplayed FROM games WHERE name='" . $name . "'";
+    $statement = "SELECT id, numplayed FROM games WHERE name='" . $name . "'";
 
-    $result = $db->query( $sql ) or die( $mysql->error );
+    $result = $database->query( $statement ) or die( $database->error );
 
     if ( $result->num_rows > 0 )
     {
         while ( $obj = $result->fetch_object() )
         {
-            $numplayed = $obj->numplayed+1;
+            $numplayed = $obj->numplayed + 1;
 
             $id = $obj->id;
         }
@@ -29,8 +29,8 @@
 
     file_put_contents( 'mounted_id.txt', $id );
 
-    $sql = 'UPDATE games SET numplayed=' . $numplayed . ',lastplayed=CURRENT_TIMESTAMP WHERE id=' . $id;
+    $statement = 'UPDATE games SET numplayed=' . $numplayed . ',lastplayed=CURRENT_TIMESTAMP WHERE id=' . $id;
 
-    $result = $db->query( $sql ) or die( $mysql->error );
+    $result = $database->query( $statement ) or die( $database->error );
 
 ?>

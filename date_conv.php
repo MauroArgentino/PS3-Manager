@@ -1,15 +1,15 @@
 <?php
 
-    require_once( 'mysql_conf.php' );
+    require_once 'mysql_conf.php';
 
-    if ( !$db = new mysqli( DB_SERVER, DB_USER, DB_PASSWORD, DB_NAME ) )
+    if ( ! $database = new mysqli( DB_SERVER, DB_USER, DB_PASSWORD, DB_NAME ) )
     {
-        die( $db->connect_errno . ' - ' . $db->connect_error );
+        die( $database->connect_errno . ' - ' . $database->connect_error );
     }
 
-    $sql = 'SELECT * from game_details';
+    $statement = 'SELECT * from game_details';
 
-    $result = $db->query( $sql ) or die( $mysql->error );
+    $result = $database->query( $statement ) or die( $database->error );
 
     if ( $result->num_rows > 0 )
     {
@@ -20,8 +20,6 @@
             $rlsdate = $obj->rlsdate;
 
             $rlsdate = str_replace( '  ', ' ', $rlsdate );
-
-            //echo $id . '\n\n' .
 
             $rls_arr = explode( ' ', $rlsdate );
 
@@ -81,6 +79,7 @@
             {
                 $rls_arr_corr[ 'month' ] = '11';
             }
+
             if ( $rls_arr[ 0 ] == 'Dec' )
             {
                 $rls_arr_corr[ 'month' ] = '12';
@@ -90,18 +89,16 @@
 
             $rls_arr_corr[ 'day' ] = $rls_arr[ 1 ];
 
-            $sql_string = $rls_arr_corr[ 'year' ] . '-' . $rls_arr_corr[ 'month' ] . '-' . $rls_arr_corr[ 'day' ] . ' 00:00:00';
+            $statement_string = $rls_arr_corr[ 'year' ] . '-' . $rls_arr_corr[ 'month' ] . '-' . $rls_arr_corr[ 'day' ] . ' 00:00:00';
 
-            $sql_up[] = "UPDATE game_details SET rel_date='" . $sql_string . "' WHERE id=" . $id;
+            $statement_up[] = "UPDATE game_details SET rel_date='" . $statement_string . "' WHERE id=" . $id;
         }
 
-        foreach ( $sql_up as $value )
+        foreach ( $statement_up as $value )
         {
-            echo $value . '\n\n';
+            echo $value . "\n\n";
 
-            $conn_chk = mysqli_connect( $mysql_host, $mysql_user, $mysql_password, $mysql_db );
-
-            $result_chk = $conn_chk->query( $value );
+            $database->query( $value );
         }
     }
 

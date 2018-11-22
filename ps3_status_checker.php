@@ -1,19 +1,19 @@
 <?php
 
-    require_once( 'config.php' );
+    require_once 'config.php';
 
     $now = date( 'd-m-Y H:i:s' );
 
     $row_cnt = 0;
 
-    if ( !$db = new mysqli( DB_SERVER, DB_USER, DB_PASSWORD, DB_NAME ) )
+    if ( ! $database = new mysqli( DB_SERVER, DB_USER, DB_PASSWORD, DB_NAME ) )
     {
-        die( $db->connect_errno . ' - ' . $db->connect_error );
+        die( $database->connect_errno . ' - ' . $database->connect_error );
     }
 
-    $sql = 'SELECT name FROM games';
+    $statement = 'SELECT name FROM games';
 
-    $result = $db->query( $sql ) or die( $mysql->error );
+    $result = $database->query( $statement ) or die( $database->error );
 
     $row_cnt = $result->num_rows;
 
@@ -25,7 +25,7 @@
 
         $fP = fSockOpen( $host, $port, $errno, $errstr, $timeout );
 
-        if ( !$fP )
+        if ( ! $fP )
         {
             return 'down';
         }
@@ -48,7 +48,7 @@
         return preg_replace( '/[^A-Za-z0-9\-]/', '', $string ); // Removes special chars .
     }
 
-    if( $ps3_up == 'up' )
+    if ( $ps3_up == 'up' )
     {
         //$html[ 'cpursx_ps3' ] = file_get_contents( 'http://' . $ps3_ip . '/cpursx_ps3' );
 
@@ -133,7 +133,7 @@
 
     $ps_status = '<table >';
 
-    if( $ps3_up == 'down' )
+    if ( $ps3_up == 'down' )
     {
         $ps_status .="<tr><td style='color: #3399AA;'><b>PS3 System</b></td><td style='color: red; font-weight: bold; text-align: center; width: auto;'>OFFLINE</td></tr>";
 
@@ -177,11 +177,11 @@
         $ps_status .= "<tr><td><font color='#3399AA'><b>HD USB</b></font></td><td style='color: black; text-align: center;  width: auto;'>" . $disk_ext_free . $mb_free . '</td></tr>';
     }
 
-    if( $mounted_game != '' )
+    if ( $mounted_game != '' )
     {
         $ps_status .= "<tr id='game_mounted'><td><font color='#3399AA'><b>Mounted Game</b></font></td><td style='color: black; text-align: center; font-size: normal; padding-right: 10px; width: auto;'>" . $mounted_game . '</td></tr>';
 
-        if( $play_time != '' )
+        if ( $play_time != '' )
         {
             $ps_status .= "<tr id='time_play'><td><font color='#3399AA'><b>Game Play Time</b></font></td><td style='color: black; text-align: center; width: auto;'>" . $play_time . '</td></tr>';
         }

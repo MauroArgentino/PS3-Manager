@@ -6,13 +6,13 @@
 
     $detect = new Mobile_Detect;
 
-    require_once ( 'config.php' );
+    require_once 'config.php';
 
-    //require_once( 'visits.php' );
+    //require_once 'visits.php';
 
-    $id = $_GET[ 'game' ];
+    $id = isset( $_REQUEST[ 'game' ] ) ? intval( $_REQUEST[ 'game' ] ) : 0;
 
-    $sql_call = file_get_contents( 'http://' . $_SERVER[ 'SERVER_NAME' ] . '/game_display_sql.php?id=' . $id );
+    $statement_call = file_get_contents( 'http://' . $_SERVER[ 'SERVER_NAME' ] . '/game_display_sql.php?id=' . $id );
 
     $directory = $ps3_folder;
 
@@ -22,11 +22,11 @@
 
     // USB EXTERNAL GAMEDATA CALL
 
-    require( 'check_usb.php' );
+    require_once 'check_usb.php';
 
     // SHUTDOWN CALL
 
-    if( htmlspecialchars( $_GET[ 'command' ] ) == 'shutdown' )
+    if ( isset( $_REQUEST[ 'command' ] ) && $_REQUEST[ 'command' ] == 'shutdown' )
     {
         $web_call_gamedata = file_get_contents( 'http://' . $ps3_ip . '/shutdown.ps3' );
 
@@ -35,7 +35,7 @@
 
     // REBOOT CALL
 
-    if( htmlspecialchars( $_GET[ 'command' ] ) == 'reboot' )
+    if ( isset( $_REQUEST[ 'command' ] ) && $_REQUEST[ 'command' ] == 'reboot' )
     {
         $web_call_gamedata = file_get_contents( 'http://' . $ps3_ip . '/restart.ps3' );
 
@@ -44,9 +44,9 @@
 
     // UNMOUNT CALL
 
-    if( htmlspecialchars( $_GET[ 'command' ] ) == 'unmount' )
+    if ( isset( $_REQUEST[ 'command' ] ) && $_REQUEST[ 'command' ] == 'unmount' )
     {
-        $sql_call = file_get_contents( 'http://' . $_SERVER[ 'SERVER_NAME' ] . '/game_update_timeplay.php?id=' . $id );
+        $statement_call = file_get_contents( 'http://' . $_SERVER[ 'SERVER_NAME' ] . '/game_update_timeplay.php?id=' . $id );
 
         $web_call_gamedata = file_get_contents( 'http://' . $ps3_ip . '/mount.ps3/unmount' );
 
@@ -63,13 +63,13 @@
 
     // CHOOSING HTML FILE ACCORDING TO THE DETECTED DEVICE
 
-    if ( $detect->isMobile() && !$detect->isTablet() )
+    if ( $detect->isMobile() && ! $detect->isTablet() )
     {
         $webpage = file_get_contents( 'html_files/games_mobile.html' );
 
         $mobile_page = 1;
     }
-    elseif( $detect->isTablet() )
+    else if ( $detect->isTablet() )
     {
         // Any tablet device .
 
@@ -102,16 +102,16 @@
 
     $output_set_gamedata = '<a href="index.php?command=gamedata" onclick="return confirm(\'Change Gamedata Setup ?\')">' . $game_data_status . '</a>';
 
-    if( $mobile_page = 1 )
+    if ( $mobile_page = 1 )
     {
         $output_set_gamedata = '<a class="links" style="color: black; text-decoration: none" onclick="return confirm(\'Change Gamedata Setup ?\')" href="index.php?command=gamedata">' . $game_data_status . '</a>';
     }
 
-    if( $game_data_status == 'NO USB DRIVE' )
+    if ( $game_data_status == 'NO USB DRIVE' )
     {
         $output_set_gamedata = '<a href="#">' . $game_data_status . '</a>';
 
-        if( $mobile_page = 1 )
+        if ( $mobile_page = 1 )
         {
             $output_set_gamedata = '<a class="links" style="color: black; text-decoration: none"  href="#">' . $game_data_status . '</a>';
         }

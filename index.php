@@ -6,17 +6,13 @@
 
     $detect = new Mobile_Detect;
 
-    require_once ( 'config.php' );
+    require_once 'config.php';
 
-    // require_once( 'classes/debug.php' );
+    // require_once 'classes/debug.php';
 
-    // Load global ISO size
+    require_once 'get_total_iso_size.php';
 
-    require_once( 'get_total_iso_size.php' );
-
-    // Load initial search
-
-    require_once ( 'init_search.php' );
+    require_once 'init_search.php';
 
     $directory = $ps3_folder;
 
@@ -24,15 +20,11 @@
 
     $now = date( 'F j, Y, g:i a' );
 
-    // USB EXTERNAL GAMEDATA CALL
-
-    require_once ( 'check_usb.php' );
+    require_once 'check_usb.php';
 
     // SHUTDOWN CALL
 
-    $command = isset( $_GET[ 'command' ] ) ? htmlspecialchars( $_GET[ 'command' ] ) : null;
-
-    if ( $command == 'shutdown' )
+    if ( isset( $_REQUEST[ 'command' ] ) && $_REQUEST[ 'command' ] == 'shutdown' )
     {
         $web_call_gamedata = file_get_contents( 'http://' . $ps3_ip . '/shutdown.ps3' );
 
@@ -43,7 +35,7 @@
 
     // REBOOT CALL
 
-    if ( $command == 'reboot' )
+    if ( isset( $_REQUEST[ 'command' ] ) && $_REQUEST[ 'command' ] == 'reboot' )
     {
         $web_call_gamedata = file_get_contents( 'http://' . $ps3_ip . '/reboot.ps3?quick' );
 
@@ -52,32 +44,32 @@
         header( 'Refresh:0; url=index.php' );
     }
 
-    // MOUNT CALL
-
-    $mount = isset( $_GET[ 'mount' ] ) ? htmlspecialchars( $_GET[ 'mount' ] ) : null;
-
-    if ( $mount )
-    {
-        $sql_call = file_get_contents( 'http://' . $_SERVER[ 'SERVER_NAME' ] . '/game_update_sql.php?name=' . $mount );
-
-        $web_call_unmount = file_get_contents( 'http://' . $ps3_ip . '/mount.ps3/unmount' );
-
-        $web_call_mount = file_get_contents( 'http://' . $ps3_ip . '/mount.ps3/net0/PS3ISO/' . $mount );
-
-        header( 'Refresh:0; url=index.php' );
-    }
-
     // UNMOUNT CALL
 
-    if ( $command == 'unmount' )
+    if ( isset( $_REQUEST[ 'command' ] ) && $_REQUEST[ 'command' ] == 'unmount' )
     {
-        $sql_call = file_get_contents( 'http://' . $_SERVER[ 'SERVER_NAME' ] . '/game_update_timeplay.php?id=' . $id );
+        $statement_call = file_get_contents( 'http://' . $_SERVER[ 'SERVER_NAME' ] . '/game_update_timeplay.php?id=' . $id );
 
         $web_call_gamedata = file_get_contents( 'http://' . $ps3_ip . '/mount.ps3/unmount' );
 
         //$update_status = file_get_contents( 'http://' . $_SERVER[ 'SERVER_NAME' ] . '/ps3_status_checker.php' );
 
         sleep( 3 );
+
+        header( 'Refresh:0; url=index.php' );
+    }
+
+    // MOUNT CALL
+
+    $mount = isset( $_REQUEST[ 'mount' ] ) ? htmlspecialchars( $_REQUEST[ 'mount' ] ) : null;
+
+    if ( $mount )
+    {
+        $statement_call = file_get_contents( 'http://' . $_SERVER[ 'SERVER_NAME' ] . '/game_update_sql.php?name=' . $mount );
+
+        $web_call_unmount = file_get_contents( 'http://' . $ps3_ip . '/mount.ps3/unmount' );
+
+        $web_call_mount = file_get_contents( 'http://' . $ps3_ip . '/mount.ps3/net0/PS3ISO/' . $mount );
 
         header( 'Refresh:0; url=index.php' );
     }
@@ -98,11 +90,10 @@
 
         $mobile_page = 1;
     }
-
-    // Any tablet device . 
-
-    elseif ( $detect->isTablet() )
+    else if ( $detect->isTablet() )
     {
+        // Any tablet device .
+
         $webpage = file_get_contents( 'html_files/base.html' );
 
         $menu_html = file_get_contents( 'html_files/menu.html' );
@@ -164,11 +155,11 @@
 
     //SETTING UP SELECT DROP DOWN
 
-    $selector = isset( $_GET[ 'order' ] ) ? htmlspecialchars( $_GET[ 'order' ] ) : null;
+    $selector = isset( $_REQUEST[ 'order' ] ) ? htmlspecialchars( $_REQUEST[ 'order' ] ) : null;
 
-    $numres_select = isset( $_GET[ 'numres' ] ) ? htmlspecialchars( $_GET[ 'numres' ] ) : null;
+    $numres_select = isset( $_REQUEST[ 'numres' ] ) ? htmlspecialchars( $_REQUEST[ 'numres' ] ) : null;
 
-    require_once( 'selector_html.php' );
+    require_once 'selector_html.php';
 
     $head_select = empty( $head_select ) ? null : $head_select;
 

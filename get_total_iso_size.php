@@ -1,6 +1,6 @@
 <?php
 
-    require_once( 'mysql_conf.php' );
+    require_once 'mysql_conf.php';
 
     // FUNCTION TO CONVERT TO READABLE FILESIZE
 
@@ -12,7 +12,7 @@
 
         foreach( $arBytes as $arItem )
         {
-            if( $bytes >= $arItem[ 'VALUE' ] )
+            if ( $bytes >= $arItem[ 'VALUE' ] )
             {
                 $result = $bytes / $arItem[ 'VALUE' ];
 
@@ -33,17 +33,17 @@
         die( $database->connect_errno . ' - ' . $database->connect_error );
     }
 
-    $sql_count = 'SELECT id FROM games';
+    $statement_count = 'SELECT id FROM games';
 
-    $result_count = $database->query( $sql_count ) or die( $database->error );
+    $result_count = $database->query( $statement_count ) or die( $database->error );
 
     $games_number = $result_count->num_rows;
 
     // Get never played games number
 
-    $sql_count_np = "SELECT id FROM games where numplayed='0'";
+    $statement_count_np = "SELECT id FROM games where numplayed='0'";
 
-    $result_count_np = $database->query( $sql_count_np ) or die( $database->error );
+    $result_count_np = $database->query( $statement_count_np ) or die( $database->error );
 
     $games_number_np = $result_count_np->num_rows;
 

@@ -1,7 +1,7 @@
 
 <?php
 
-    require_once ( 'config.php' );
+    require_once 'config.php';
 
     error_reporting( E_ERROR | E_PARSE );
 
@@ -52,15 +52,22 @@
 
         if ( $proportional )
         {
-          if ( $width  == 0 )  $factor = $height/$height_old;
+            if ( $width  == 0 )
+            {
+                $factor = $height / $height_old;
+            }
+            else if ( $height == 0 )
+            {
+                $factor = $width / $width_old;
+            }
+            else
+            {
+                $factor = min( $width / $width_old, $height / $height_old );
+            }
 
-          elseif ( $height == 0 )  $factor = $width/$width_old;
+            $final_width  = round( $width_old * $factor );
 
-          else                    $factor = min( $width / $width_old, $height / $height_old );
-
-          $final_width  = round( $width_old * $factor );
-
-          $final_height = round( $height_old * $factor );
+            $final_height = round( $height_old * $factor );
         }
         else
         {
@@ -85,16 +92,17 @@
         {
             case IMAGETYPE_JPEG: $file !== null ? $image = imagecreatefromjpeg( $file ) : $image = imagecreatefromstring( $string ); break;
 
-            case IMAGETYPE_GIF: $file !== null ? $image = imagecreatefromgif( $file )  : $image = imagecreatefromstring( $string ); break;
+            case IMAGETYPE_GIF: $file !== null ? $image = imagecreatefromgif ( $file )  : $image = imagecreatefromstring( $string ); break;
 
             case IMAGETYPE_PNG: $file !== null ? $image = imagecreatefrompng( $file )  : $image = imagecreatefromstring( $string ); break;
 
             default: return false;
         }
 
-
         # This is the resizing/resampling/transparency-preserving magic
+
         $image_resized = imagecreatetruecolor( $final_width, $final_height );
+
         if ( ( $info[ 2 ] == IMAGETYPE_GIF ) || ( $info[ 2 ] == IMAGETYPE_PNG ) )
         {
             $transparency = imagecolortransparent( $image );
@@ -111,7 +119,7 @@
 
                 imagecolortransparent( $image_resized, $transparency );
             }
-            elseif ( $info[ 2 ] == IMAGETYPE_PNG )
+            else if ( $info[ 2 ] == IMAGETYPE_PNG )
             {
                 imagealphablending( $image_resized, false );
 
@@ -129,8 +137,14 @@
 
         if ( $delete_original )
         {
-            if ( $use_linux_commands ) exec( 'rm ' . $file );
-            else @unlink( $file );
+            if ( $use_linux_commands )
+            {
+                exec( 'rm ' . $file );
+            }
+            else
+            {
+                @ unlink( $file );
+            }
         }
 
         # Preparing a method of providing result
@@ -138,15 +152,23 @@
         switch ( strtolower( $output ) )
         {
             case 'browser':
-            $mime = image_type_to_mime_type( $info[ 2 ] );
-            header( "Content-type: $mime" );
-            $output = NULL;
+            {
+                $mime = image_type_to_mime_type( $info[ 2 ] );
+
+                header( "Content-type: $mime" );
+
+                $output = NULL;
+            }
             break;
             case 'file':
-            $output = $file;
+            {
+                $output = $file;
+            }
             break;
             case 'return':
-            return $image_resized;
+            {
+                return $image_resized;
+            }
             break;
             default:
             break;
@@ -156,13 +178,27 @@
 
         switch ( $info[ 2 ] )
         {
-            case IMAGETYPE_GIF: imagegif( $image_resized, $output ); break;
-            case IMAGETYPE_JPEG: imagejpeg( $image_resized, $output, $quality ); break;
-            case IMAGETYPE_PNG:
-            $quality = 9 - ( int )( ( 0.9 * $quality ) / 10.0 );
-            imagepng( $image_resized, $output, $quality );
+            case IMAGETYPE_GIF:
+            {
+                imagegif( $image_resized, $output );
+            }
             break;
-            default: return false;
+            case IMAGETYPE_JPEG:
+            {
+                imagejpeg( $image_resized, $output, $quality );
+            }
+            break;
+            case IMAGETYPE_PNG:
+            {
+                $quality = 9 - ( int )( ( 0.9 * $quality ) / 10.0 );
+
+                imagepng( $image_resized, $output, $quality );
+            }
+            break;
+            default:
+            {
+                return false;
+            }
         }
 
         return true;
@@ -190,23 +226,25 @@
             {
                 $x = $x + 1;
 
-
                 //indicate which file to resize ( can be any type jpg/png/gif/etc . . . )
+
                 $file = $directory . '/' . $value;
 
                 //indicate the path and name for the new resized file
+
                 $resizedFile = $directory . '/' . $value;
 
                 //call the function ( when passing path to pic )
+
                 smart_resize_image( $file, null, 260, 300, false, $resizedFile, false, false, 100 );
 
-                echo date( 'Y/m/d h:i:sa' ) . ' ' . $value . ' ' . $width . ' ' . $height . ' has been resized \n';
+                echo date( 'Y/m/d h:i:sa' ) . ' ' . $value . ' ' . $width . ' ' . $height . ' has been resized' . "\n";
             }
         }
     }
 
-    echo '---------------------------------------------------\n';
-    echo date( 'Y/m/d h:i:sa' ) . ' ' . $x . ' covers has been resized \n';
-    echo '---------------------------------------------------\n';
+    echo '---------------------------------------------------' . "\n";
+    echo date( 'Y/m/d h:i:sa' ) . ' ' . $x . ' covers has been resized' . "\n";
+    echo '---------------------------------------------------' . "\n";
 
 ?>

@@ -1,24 +1,12 @@
 <?php
 
-    require_once ( 'config.php' );
+    require_once 'config.php';
 
-    $servername = $mysql_host;
+    $database = new mysqli( $database_host, $database_user, $database_password, $database_name );
 
-    $username = $mysql_user;
-
-    $password = $mysql_password;
-
-    $dbname = $mysql_db;
-
-    // Create connection
-
-    $conn = new mysqli( $servername, $username, $password, $dbname );
-
-    // Check connection
-
-    if ( $conn->connect_error )
+    if ( $database->connect_error )
     {
-        die( 'Connection failed: ' . $conn->connect_error );
+        die( 'Connection failed: ' . $database->connect_error );
     }
 
     date_default_timezone_set( 'Europe/Amsterdam' );
@@ -45,38 +33,38 @@
         {
             $game_name = str_replace( '.iso', '', $newfile );
 
-            $sql = "SELECT * FROM `games` WHERE `name` = '" . $game_name . "';";
+            $statement = "SELECT * FROM `games` WHERE `name` = '" . $game_name . "';";
 
-            echo $sql . '\n';
+            echo $statement . "\n";
 
-            $result = $conn->query( $sql );
+            $result = $database->query( $statement );
 
             if ( $result->num_rows > 0 )
             {
-                echo 'Record ' . $game_name . ' already exists' . '\n\n';
+                echo 'Record ' . $game_name . ' already exists' . "\n\n";
             }
             else
             {
-                $sql = "INSERT INTO `games`(`name`, `isoname`, `covername`,`dateadded`) VALUES ('" . $game_name . "','" . $directory . '/' . $newfile . "','" . $directory . '/' . $newfile . ".jpg',CURRENT_TIMESTAMP);";
+                $statement = "INSERT INTO `games`(`name`, `isoname`, `covername`,`dateadded`) VALUES ('" . $game_name . "','" . $directory . '/' . $newfile . "','" . $directory . '/' . $newfile . ".jpg',CURRENT_TIMESTAMP);";
 
-                echo $sql . '\n';
+                echo $statement . "\n";
 
-                if ( $conn->query( $sql ) === TRUE )
+                if ( $database->query( $statement ) === TRUE )
                 {
-                    echo $game_name . ' record created successfully \n\n';
+                    echo $game_name . ' record created successfully.' . "\n\n";
                 }
                 else
                 {
-                    echo 'Error: ' . $sql . ' ' . $conn->error . '\n\n';
+                    echo 'Error: ' . $statement . ' ' . $database->error . "\n\n";
                 }
             }
         }
     }
 
-    $conn->close();
+    $database->close();
 
     // ADDING DETAILS TO game_details
 
-    require_once( 'metacritic.php' );
+    require_once 'metacritic.php';
 
 ?>

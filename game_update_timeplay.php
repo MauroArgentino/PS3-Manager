@@ -1,23 +1,23 @@
 <?php
 
-    require_once( 'config.php' );
+    require_once 'config.php';
 
-    require_once( 'mysql_conf.php' );
+    require_once 'mysql_conf.php';
 
-    require_once( 'time_calc.php' );
+    require_once 'time_calc.php';
 
     // Reading last PS3 Status Check file
 
     $id = file_get_contents( 'mounted_id.txt' );
 
-    if ( !$db = new mysqli( DB_SERVER, DB_USER, DB_PASSWORD, DB_NAME ) )
+    if ( ! $database = new mysqli( DB_SERVER, DB_USER, DB_PASSWORD, DB_NAME ) )
     {
-        die( $db->connect_errno . ' - ' . $db->connect_error );
+        die( $database->connect_errno . ' - ' . $database->connect_error );
     }
 
-    $sql = "SELECT id, name, time_played FROM games WHERE id='" . $id . "'";
+    $statement = "SELECT id, name, time_played FROM games WHERE id='" . $id . "'";
 
-    $result = $db->query( $sql ) or die( $mysql->error );
+    $result = $database->query( $statement ) or die( $database->error );
 
     if ( $result->num_rows > 0 )
     {
@@ -63,9 +63,9 @@
 
     $total_time = secondsToTime( $total_seconds );
 
-    $sql = "UPDATE games SET time_played='" . $total_seconds . "' WHERE id='" . $id . "'";
+    $statement = "UPDATE games SET time_played='" . $total_seconds . "' WHERE id='" . $id . "'";
 
-    $result = $db->query( $sql ) or die( $mysql->error );
+    $result = $database->query( $statement ) or die( $database->error );
 
     // Resetting last Game mounted id
 

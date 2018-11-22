@@ -22,6 +22,6 @@ $app_version ='0.42c';
 
 // Include Mysql Configuration
 
-require_once( 'mysql_conf.php' );
+require_once 'mysql_conf.php';
 
 ?>

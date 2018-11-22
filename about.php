@@ -1,6 +1,6 @@
 <?php
 
-    require_once ( 'config.php' );
+    require_once 'config.php';
 
     require_once 'mobiledetect/Mobile_Detect.php';
 
@@ -16,11 +16,11 @@
 
     // USB EXTERNAL GAMEDATA CALL
 
-    require( 'check_usb.php' );
+    require_once 'check_usb.php';
 
     // SHUTDOWN CALL
 
-    if( htmlspecialchars( $_GET[ 'command' ] ) == 'shutdown' )
+    if ( isset( $_REQUEST[ 'command' ] ) && $_REQUEST[ 'command' ] == 'shutdown' )
     {
         $web_call_gamedata = file_get_contents( 'http://' . $ps3_ip . '/shutdown.ps3' );
 
@@ -29,7 +29,7 @@
 
     // REBOOT CALL
 
-    if( htmlspecialchars( $_GET[ 'command' ] ) == 'reboot' )
+    if ( isset( $_REQUEST[ 'command' ] ) && $_REQUEST[ 'command' ] == 'reboot' )
     {
         $web_call_gamedata = file_get_contents( 'http://' . $ps3_ip . '/restart.ps3' );
 
@@ -38,9 +38,9 @@
 
     // UNMOUNT CALL
 
-    if( htmlspecialchars( $_GET[ 'command' ] ) == 'unmount' )
+    if ( isset( $_REQUEST[ 'command' ] ) && $_REQUEST[ 'command' ] == 'unmount' )
     {
-        $sql_call = file_get_contents( 'http://' . $_SERVER[ 'SERVER_NAME' ] . '/game_update_timeplay.php?id=' . $id );
+        $statement_call = file_get_contents( 'http://' . $_SERVER[ 'SERVER_NAME' ] . '/game_update_timeplay.php?id=' . $id );
 
         $web_call_gamedata = file_get_contents( 'http://' . $ps3_ip . '/mount.ps3/unmount' );
 
@@ -59,7 +59,7 @@
 
         header( 'Refresh:0; url=index.php' );
     }
-    elseif( $detect->isTablet() )
+    else if ( $detect->isTablet() )
     {
         // Any tablet device .
 
@@ -93,16 +93,16 @@
 
     $output_set_gamedata = '<a href="index.php?command=gamedata" onclick="return confirm(\'Change Gamedata Setup ?\')">' . $game_data_status . '</a>';
 
-    if( $mobile_page == 1 )
+    if ( $mobile_page == 1 )
     {
         $output_set_gamedata = '<a class="links" style="color: black; text-decoration: none" onclick="return confirm(\'Change Gamedata Setup ?\')" href="index.php?command=gamedata">' . $game_data_status . '</a>';
     }
 
-    if( $game_data_status == 'NO USB DRIVE' )
+    if ( $game_data_status == 'NO USB DRIVE' )
     {
         $output_set_gamedata = '<a href="#">' . $game_data_status . '</a>';
 
-        if( $mobile_page == 1 )
+        if ( $mobile_page == 1 )
         {
             $output_set_gamedata = '<a class="links" style="color: black; text-decoration: none"  href="#">' . $game_data_status . '</a>';
         }

@@ -1,10 +1,10 @@
 <?php
 
-    require_once( 'mysql_conf.php' );
+    require_once 'mysql_conf.php';
 
-    require_once( 'time_calc.php' );
+    require_once 'time_calc.php';
 
-    $id = $_GET[ 'id' ];
+    $id = isset( $_REQUEST[ 'id' ] ) ? intval( $_REQUEST[ 'id' ] ) : 0;
 
     // FUNCTION TO CONVERT TO READABLE FILESIZE
 
@@ -16,7 +16,7 @@
 
         foreach( $arBytes as $arItem )
         {
-            if( $bytes >= $arItem[ 'VALUE' ] )
+            if ( $bytes >= $arItem[ 'VALUE' ] )
             {
                 $result = $bytes / $arItem[ 'VALUE' ];
 
@@ -29,27 +29,27 @@
         return $result;
     }
 
-    if ( !$db = new mysqli( DB_SERVER, DB_USER, DB_PASSWORD, DB_NAME ) )
+    if ( ! $database = new mysqli( DB_SERVER, DB_USER, DB_PASSWORD, DB_NAME ) )
     {
-        die( $db->connect_errno . ' - ' . $db->connect_error );
+        die( $database->connect_errno . ' - ' . $database->connect_error );
     }
 
     $game_record_html = file_get_contents( 'html_files/game_record.html' );
 
-    if( $id == 'random' )
+    if ( $id == 'random' )
     {
-        $sql = 'SELECT id FROM games';
+        $statement = 'SELECT id FROM games';
 
-        $result = $db->query( $sql ) or die( $mysql->error );
+        $result = $database->query( $statement ) or die( $database->error );
 
         $id = rand( 1, $result->num_rows );
     }
 
-    $sql = "SELECT id, name, time_played, isoname, covername, numplayed, lastplayed FROM games WHERE ID='" . $id . "'";
+    $statement = "SELECT id, name, time_played, isoname, covername, numplayed, lastplayed FROM games WHERE ID='" . $id . "'";
 
-    $sql_details = "SELECT name,category,developer,publisher,score,rlsdate,description FROM game_details WHERE ID='" . $id . "'";
+    $statement_details = "SELECT name,category,developer,publisher,score,rlsdate,description FROM game_details WHERE ID='" . $id . "'";
 
-    $result = $db->query( $sql ) or die( $mysql->error );
+    $result = $database->query( $statement ) or die( $database->error );
 
     if ( $result->num_rows > 0 )
     {
@@ -90,7 +90,7 @@
             $game_record_html = str_replace( '%ISO_SIZE%', $isofilesize, $game_record_html );
         }
 
-        $result_details = $db->query( $sql_details ) or die( $mysql->error );
+        $result_details = $database->query( $statement_details ) or die( $database->error );
 
         while ( $obj = $result_details->fetch_object() )
         {
