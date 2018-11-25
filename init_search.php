@@ -27,7 +27,7 @@
         $limit_str = 'LIMIT ' . $numres;
     }
 
-    //file_put_contents( 'selector.txt', $selector );
+    // @ file_put_contents( 'selector.txt', $selector ) or die ( 'Error: ' . basename( __FILE__ ) . ':' . __LINE__ );
 
     $statement = 'SELECT id, name, isoname, covername, numplayed FROM games ';
 
@@ -82,7 +82,7 @@
         $statement = 'SELECT id, name, isoname, covername, numplayed FROM games ORDER BY lastplayed DESC ' . $limit_str;
     }
 
-    if ( ! $database = new mysqli( DB_SERVER, DB_USER, DB_PASSWORD, DB_NAME ) )
+    if ( ! $database = new mysqli( DATABASE_HOSTNAME, DATABASE_USERNAME, DATABASE_PASSWORD, DATABASE_NAME ) )
     {
         die ( $database->connect_errno . ' - ' . $database->connect_error );
     }

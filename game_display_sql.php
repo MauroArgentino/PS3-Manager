@@ -14,7 +14,9 @@
 
         $arBytes = array( 0 => array( 'UNIT' => 'TB', 'VALUE' => pow( 1024, 4 ) ), 1 => array( 'UNIT' => 'GB', 'VALUE' => pow( 1024, 3 ) ), 2 => array( 'UNIT' => 'MB', 'VALUE' => pow( 1024, 2 ) ), 3 => array( 'UNIT' => 'KB', 'VALUE' => 1024 ), 4 => array( 'UNIT' => 'B', 'VALUE' => 1 ), );
 
-        foreach( $arBytes as $arItem )
+        $result = '';
+
+        foreach ( $arBytes as $arItem )
         {
             if ( $bytes >= $arItem[ 'VALUE' ] )
             {
@@ -29,12 +31,12 @@
         return $result;
     }
 
-    if ( ! $database = new mysqli( DB_SERVER, DB_USER, DB_PASSWORD, DB_NAME ) )
+    if ( ! $database = new mysqli( DATABASE_HOSTNAME, DATABASE_USERNAME, DATABASE_PASSWORD, DATABASE_NAME ) )
     {
         die( $database->connect_errno . ' - ' . $database->connect_error );
     }
 
-    $game_record_html = file_get_contents( 'html_files/game_record.html' );
+    $game_record_html = @ file_get_contents( 'html_files/game_record.html' ) or die ( 'Error: ' . basename( __FILE__ ) . ':' . __LINE__ );
 
     if ( $id == 'random' )
     {
@@ -124,7 +126,7 @@
 
         }
 
-        file_put_contents( 'html_files/complete_game_record.html', $game_record_html );
+        @ file_put_contents( 'html_files/complete_game_record.html', $game_record_html ) or die ( 'Error: ' . basename( __FILE__ ) . ':' . __LINE__ );
     }
 
 ?>

@@ -6,7 +6,7 @@
 
     $row_cnt = 0;
 
-    if ( ! $database = new mysqli( DB_SERVER, DB_USER, DB_PASSWORD, DB_NAME ) )
+    if ( ! $database = new mysqli( DATABASE_HOSTNAME, DATABASE_USERNAME, DATABASE_PASSWORD, DATABASE_NAME ) )
     {
         die( $database->connect_errno . ' - ' . $database->connect_error );
     }
@@ -50,9 +50,9 @@
 
     if ( $ps3_up == 'up' )
     {
-        //$html[ 'cpursx_ps3' ] = file_get_contents( 'http://' . $ps3_ip . '/cpursx_ps3' );
+        //$html[ 'cpursx_ps3' ] = @ file_get_contents( 'http://' . $ps3_ip . '/cpursx_ps3' ) or die ( 'Error: ' . basename( __FILE__ ) . ':' . __LINE__ );
 
-        $ps_status_page = file_get_contents( 'http://' . $ps3_ip . '/cpursx.ps3' );
+        $ps_status_page = @ file_get_contents( 'http://' . $ps3_ip . '/cpursx.ps3' ) or die ( 'Error: ' . basename( __FILE__ ) . ':' . __LINE__ );
 
         preg_match( '~up">CPU:(.*?)<~', $ps_status_page, $cpu_temp );
 
@@ -197,6 +197,6 @@
 
     echo $row_cnt;
 
-    file_put_contents( $local_path . '/ps3_status_output.txt', $ps_status );
+    @ file_put_contents( $local_path . '/ps3_status_output.txt', $ps_status ) or die ( 'Error: ' . basename( __FILE__ ) . ':' . __LINE__ );
 
 ?>

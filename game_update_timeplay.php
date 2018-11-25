@@ -8,9 +8,9 @@
 
     // Reading last PS3 Status Check file
 
-    $id = file_get_contents( 'mounted_id.txt' );
+    $id = @ file_get_contents( 'mounted_id.txt' ) or die ( 'Error: ' . basename( __FILE__ ) . ':' . __LINE__ );
 
-    if ( ! $database = new mysqli( DB_SERVER, DB_USER, DB_PASSWORD, DB_NAME ) )
+    if ( ! $database = new mysqli( DATABASE_HOSTNAME, DATABASE_USERNAME, DATABASE_PASSWORD, DATABASE_NAME ) )
     {
         die( $database->connect_errno . ' - ' . $database->connect_error );
     }
@@ -37,7 +37,7 @@
 
     // Played time before Game Unmounting
 
-    $ps_status_page = file_get_contents( 'http://' . $ps3_ip . '/cpursx.ps3' );
+    $ps_status_page = @ file_get_contents( 'http://' . $ps3_ip . '/cpursx.ps3' ) or die ( 'Error: ' . basename( __FILE__ ) . ':' . __LINE__ );
 
     preg_match( '~Play">&#9737;</label>(.*?)<br>~', $ps_status_page, $play_time );
 
@@ -69,6 +69,6 @@
 
     // Resetting last Game mounted id
 
-    file_put_contents( 'mounted_id.txt', '' );
+    @ file_put_contents( 'mounted_id.txt', '' ) or die ( 'Error: ' . basename( __FILE__ ) . ':' . __LINE__ );
 
 ?>

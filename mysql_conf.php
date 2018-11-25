@@ -1,21 +1,19 @@
 <?php
 
-// MYSQL Server Details
+$database_hostname = 'localhost';
 
-$database_host = 'localhost';
-
-$database_user = 'root';
+$database_username = 'root';
 
 $database_password = '';
 
-$database_db = 'ps3-games'; //<---- change this only if you want to call the database in a different way
+$database_name = 'ps3-games';
 
-defined( 'DB_USER' ) or define( 'DB_USER', $database_user );
+defined( 'DATABASE_USERNAME' ) or define( 'DATABASE_USERNAME', $database_username );
 
-defined( 'DB_PASSWORD' ) or define( 'DB_PASSWORD', $database_password );
+defined( 'DATABASE_PASSWORD' ) or define( 'DATABASE_PASSWORD', $database_password );
 
-defined( 'DB_SERVER' ) or define( 'DB_SERVER', $database_host );
+defined( 'DATABASE_HOSTNAME' ) or define( 'DATABASE_HOSTNAME', $database_hostname );
 
-defined( 'DB_NAME' ) or define( 'DB_NAME', $database_db );
+defined( 'DATABASE_NAME' ) or define( 'DATABASE_NAME', $database_name );
 
 ?>

@@ -6,15 +6,15 @@
 
     include ( 'config.php' );
 
-    define( 'DB_USER', $database_user );
+    define( 'DATABASE_USERNAME', $database_username );
 
-    define( 'DB_PASSWORD', $database_password );
+    define( 'DATABASE_PASSWORD', $database_password );
 
-    define( 'DB_SERVER', $database_host );
+    define( 'DATABASE_HOSTNAME', $database_hostname );
 
-    define( 'DB_NAME', $database_db );
+    define( 'DATABASE_NAME', $database_name );
 
-    if ( ! $database = new mysqli( DB_SERVER, DB_USER, DB_PASSWORD, DB_NAME ) )
+    if ( ! $database = new mysqli( DATABASE_HOSTNAME, DATABASE_USERNAME, DATABASE_PASSWORD, DATABASE_NAME ) )
     {
         die( $database->connect_errno . ' - ' . $database->connect_error );
     }
@@ -43,7 +43,7 @@
 
             echo $statement_chk . ' ';
 
-            $database_chk = mysqli_connect( $database_host, $database_user, $database_password, $database_db );
+            $database_chk = mysqli_connect( $database_hostname, $database_username, $database_password, $database_name );
 
             $result_chk = $database_chk->query( $statement_chk ) or die( $database->error );
 
@@ -100,7 +100,7 @@
 
             echo $statement_ins . "\n\n";
 
-            $database_ins = mysqli_connect( $database_host, $database_user, $database_password, $database_db );
+            $database_ins = mysqli_connect( $database_hostname, $database_username, $database_password, $database_name );
 
             if ( mysqli_query( $database_ins, $statement_ins ) )
             {

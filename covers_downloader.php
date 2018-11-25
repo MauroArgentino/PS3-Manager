@@ -4,7 +4,7 @@
 
     $url_cover_hoster = 'http://localhost/';
 
-    $list_of_covers = file_get_contents( $url_cover_hoster . 'list_of_covers.php' ) or die ( 'Can not load the list of covers.' );
+    $list_of_covers = @ file_get_contents( $url_cover_hoster . 'list_of_covers.php' ) or die ( 'Error: ' . basename( __FILE__ ) . ':' . __LINE__ );
 
     $list_of_covers = json_decode( $list_of_covers, true ) or die ( 'A string in JSON format is expected, but can not be processed.' );
 
@@ -58,14 +58,14 @@
 
                 $language = in_array( 'DE', $list_of_available_languages_for_a_cover ) ? 'DE' : $language;
 
-                $file_content = file_get_contents( $url_cover_hoster . $language . DIRECTORY_SEPARATOR . $match[ 1 ] . '.jpg' );
+                $file_content = @ file_get_contents( $url_cover_hoster . $language . DIRECTORY_SEPARATOR . $match[ 1 ] . '.jpg' ) or die ( 'Error: ' . basename( __FILE__ ) . ':' . __LINE__ );
 
                 if ( $file_content )
                 {
                     // echo gmstrftime( '%F' ) . ' - ' . $match[ 1 ] . ' -- ' . $language . ' -- File is created ' . $path_local_cover . PHP_EOL;
                     echo gmstrftime( '%F' ) . ' - ' . $match[ 1 ] . ' -- ' . $language . ' -- File is created ' . $path_local_cover . '<br>';
 
-                    // if ( file_put_contents( $path_local_cover, $file_content ) )
+                    // if ( @ file_put_contents( $path_local_cover, $file_content ) )
                     // {
                     //     echo gmstrftime( '%F' ) . ' - ' . $match[ 1 ] . ' -- File is created ' . $path_local_cover . PHP_EOL;
                     // }

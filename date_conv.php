@@ -2,7 +2,7 @@
 
     require_once 'mysql_conf.php';
 
-    if ( ! $database = new mysqli( DB_SERVER, DB_USER, DB_PASSWORD, DB_NAME ) )
+    if ( ! $database = new mysqli( DATABASE_HOSTNAME, DATABASE_USERNAME, DATABASE_PASSWORD, DATABASE_NAME ) )
     {
         die( $database->connect_errno . ' - ' . $database->connect_error );
     }

@@ -12,7 +12,7 @@
 
     // Iterate through the returned string array
 
-    foreach( explode( ',', $strResultArray[ 0 ] ) as $intIndex => $strValue )
+    foreach ( explode( ',', $strResultArray[ 0 ] ) as $intIndex => $strValue )
     {
         print $strResultArray[ $intIndex+1 ] . ' = ' . $strValue . '<br/>';
     }

@@ -4,7 +4,7 @@
 
     $name = isset( $_REQUEST[ 'name' ] ) ? htmlspecialchars( $_REQUEST[ 'name' ] ) : null;
 
-    if ( ! $database = new mysqli( DB_SERVER, DB_USER, DB_PASSWORD, DB_NAME ) )
+    if ( ! $database = new mysqli( DATABASE_HOSTNAME, DATABASE_USERNAME, DATABASE_PASSWORD, DATABASE_NAME ) )
     {
         die( $database->connect_errno . ' - ' . $database->connect_error );
     }
@@ -27,7 +27,7 @@
 
     // Write file with the current mounted game ID
 
-    file_put_contents( 'mounted_id.txt', $id );
+    @ file_put_contents( 'mounted_id.txt', $id ) or die ( 'Error: ' . basename( __FILE__ ) . ':' . __LINE__ );
 
     $statement = 'UPDATE games SET numplayed=' . $numplayed . ',lastplayed=CURRENT_TIMESTAMP WHERE id=' . $id;
 

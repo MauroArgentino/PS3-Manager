@@ -16,13 +16,13 @@
 
     // USB EXTERNAL GAMEDATA CALL
 
-    require_once 'check_usb.php';
+    // require_once 'check_usb.php';
 
     // SHUTDOWN CALL
 
     if ( isset( $_REQUEST[ 'command' ] ) && $_REQUEST[ 'command' ] == 'shutdown' )
     {
-        $web_call_gamedata = file_get_contents( 'http://' . $ps3_ip . '/shutdown.ps3' );
+        $web_call_gamedata = @ file_get_contents( 'http://' . $ps3_ip . '/shutdown.ps3' ) or die ( 'Error: ' . basename( __FILE__ ) . ':' . __LINE__ );
 
         header( 'Refresh:0; url=index.php' );
     }
@@ -31,7 +31,7 @@
 
     if ( isset( $_REQUEST[ 'command' ] ) && $_REQUEST[ 'command' ] == 'reboot' )
     {
-        $web_call_gamedata = file_get_contents( 'http://' . $ps3_ip . '/restart.ps3' );
+        $web_call_gamedata = @ file_get_contents( 'http://' . $ps3_ip . '/restart.ps3' ) or die ( 'Error: ' . basename( __FILE__ ) . ':' . __LINE__ );
 
         header( 'Refresh:0; url=index.php' );
     }
@@ -40,16 +40,18 @@
 
     if ( isset( $_REQUEST[ 'command' ] ) && $_REQUEST[ 'command' ] == 'unmount' )
     {
-        $statement_call = file_get_contents( 'http://' . $_SERVER[ 'SERVER_NAME' ] . '/game_update_timeplay.php?id=' . $id );
+        $statement_call = @ file_get_contents( 'http://' . $_SERVER[ 'SERVER_NAME' ] . '/game_update_timeplay.php?id=' . $id ) or die ( 'Error: ' . basename( __FILE__ ) . ':' . __LINE__ );
 
-        $web_call_gamedata = file_get_contents( 'http://' . $ps3_ip . '/mount.ps3/unmount' );
+        $web_call_gamedata = @ file_get_contents( 'http://' . $ps3_ip . '/mount.ps3/unmount' ) or die ( 'Error: ' . basename( __FILE__ ) . ':' . __LINE__ );
 
         header( 'Refresh:0; url=index.php' );
     }
 
-    // GETTING STATUS HTML FILE FROM ps3_status_output . php
+    // GETTING STATUS HTML FILE FROM ps3_status_output.php
 
-    $ps_status = '<table><tr>' . file_get_contents( 'ps3_status_output.txt' ) . '</tr></table>';
+    $ps_status = @ file_get_contents( 'ps3_status_output.txt' ) or die ( 'Error: ' . basename( __FILE__ ) . ':' . __LINE__ );
+
+    $ps_status = '<table><tr>' . $ps_status . '</tr></table>';
 
     // CHOOSING HTML FILE ACCORDING TO THE DETECTED DEVICE
 
@@ -63,20 +65,20 @@
     {
         // Any tablet device .
 
-        $webpage = file_get_contents( 'html_files/about.html' );
+        $webpage = @ file_get_contents( 'html_files/about.html' ) or die ( 'Error: ' . basename( __FILE__ ) . ':' . __LINE__ );
 
-        $menu_html = file_get_contents( 'html_files/menu.html' );
+        $menu_html = @ file_get_contents( 'html_files/menu.html' ) or die ( 'Error: ' . basename( __FILE__ ) . ':' . __LINE__ );
     }
     else
     {
         // Desktops
 
-        $webpage = file_get_contents( 'html_files/about.html' );
+        $webpage = @ file_get_contents( 'html_files/about.html' ) or die ( 'Error: ' . basename( __FILE__ ) . ':' . __LINE__ );
 
-        $menu_html = file_get_contents( 'html_files/menu.html' );
+        $menu_html = @ file_get_contents( 'html_files/menu.html' ) or die ( 'Error: ' . basename( __FILE__ ) . ':' . __LINE__ );
     }
 
-    $popups_control = file_get_contents( 'html_files/popups.html' );
+    $popups_control = @ file_get_contents( 'html_files/popups.html' ) or die ( 'Error: ' . basename( __FILE__ ) . ':' . __LINE__ );
 
 
     // INJECTING DATA INTO HTML
@@ -89,7 +91,7 @@
 
     /// LOADING USB GAME DATA STATUS FILE AND CHANGING MENU
 
-    $game_data_status = file_get_contents( 'game_data_status.txt' );
+    $game_data_status = @ file_get_contents( 'game_data_status.txt' ) or die ( 'Error: ' . basename( __FILE__ ) . ':' . __LINE__ );
 
     $output_set_gamedata = '<a href="index.php?command=gamedata" onclick="return confirm(\'Change Gamedata Setup ?\')">' . $game_data_status . '</a>';
 

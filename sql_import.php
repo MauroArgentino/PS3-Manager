@@ -2,7 +2,7 @@
 
     require_once 'config.php';
 
-    $database = new mysqli( $database_host, $database_user, $database_password, $database_name );
+    $database = new mysqli( $database_hostname, $database_username, $database_password, $database_name );
 
     if ( $database->connect_error )
     {
