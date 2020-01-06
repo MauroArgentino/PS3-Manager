@@ -646,9 +646,9 @@ class PHPMailer {
    */
   function SetLanguage($lang_type, $lang_path = 'language/') {
     if(file_exists($lang_path.'phpmailer.lang-'.$lang_type.'.php')) {
-      include($lang_path.'phpmailer.lang-'.$lang_type.'.php');
+      require_once($lang_path.'phpmailer.lang-'.$lang_type.'.php');
     } elseif (file_exists($lang_path.'phpmailer.lang-en.php')) {
-      include($lang_path.'phpmailer.lang-en.php');
+      require_once($lang_path.'phpmailer.lang-en.php');
     } else {
       $PHPMAILER_LANG = array();
       $PHPMAILER_LANG["provide_address"]      = 'You must provide at least one ' .

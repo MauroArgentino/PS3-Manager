@@ -1,55 +1,65 @@
 <?php
 
-$check_usb_drive = file_get_contents("http://".$ps3_ip);
+    $check_usb_drive = @ file_get_contents( 'http://' . $ps3_ip ) or die ( 'Error: ' . basename( __FILE__ ) . ':' . __LINE__ );
 
-// Check if USB drive is connected
+    // Check if USB drive is connected
 
-$usb_status = 'OFF';  //default value
+    // default value
 
-if(strpos($check_usb_drive,'dev_usb00')) {
-	$usb_status = 'ON';
-	
-	if(!file_exists('game_data_status.txt')) { 
-		file_put_contents("game_data_status.txt",'');
-	}
-}
+    $usb_status = 'OFF';
 
+    if ( strpos( $check_usb_drive, 'dev_usb00' ) )
+    {
+        $usb_status = 'ON';
 
-if($usb_status == "ON") {
-  
-  $game_data_status = file_get_contents("game_data_status.txt");
-	
-	if(empty($game_data_status) || $game_data_status == "NO USB DRIVE") { 
-				$game_data_status = "Enable USB Gamedata";
-				file_put_contents("game_data_status.txt",$game_data_status);
-	}
-	
-	
-	
-  
-		if(htmlspecialchars($_GET["command"]) == "gamedata") {
-	
-				$web_call_gamedata = file_get_contents("http://".$ps3_ip."/extgd.ps3");
-	
-				if(strpos($web_call_gamedata, 'Disabled')) {
-						$game_data_status = "Enable USB Gamedata";
-						file_put_contents("game_data_status.txt", $game_data_status);
-				}
-	 
-				if(strpos($web_call_gamedata, 'Enabled')) { 
-						$game_data_status = "Disable USB Gamedata";
-						file_put_contents("game_data_status.txt", $game_data_status);
-				}
-		}
-		else {
-				$game_data_status = file_get_contents("game_data_status.txt");
-				file_put_contents("game_data_status.txt", $game_data_status);
-		}
-}
-	
-if($usb_status == "OFF") {
-			$game_data_status = "NO USB DRIVE";
-			file_put_contents("game_data_status.txt", $game_data_status);
-}
+        if ( file_exists( 'game_data_status.txt' ) == false )
+        {
+            @ file_put_contents( 'game_data_status.txt', '' ) or die ( 'Error: ' . basename( __FILE__ ) . ':' . __LINE__ );
+        }
+    }
+
+    if ( $usb_status == 'ON' )
+    {
+        $game_data_status = @ file_get_contents( 'game_data_status.txt' ) or die ( 'Error: ' . basename( __FILE__ ) . ':' . __LINE__ );
+
+        if ( empty( $game_data_status ) || $game_data_status == 'NO USB DRIVE' )
+        {
+            $game_data_status = 'Enable USB Gamedata';
+
+            @ file_put_contents( 'game_data_status.txt', $game_data_status ) or die ( 'Error: ' . basename( __FILE__ ) . ':' . __LINE__ );
+        }
+
+        if ( isset( $_REQUEST[ 'command' ] ) && $_REQUEST[ 'command' ] == 'gamedata' )
+        {
+            $web_call_gamedata = @ file_get_contents( 'http://' . $ps3_ip . '/extgd.ps3' ) or die ( 'Error: ' . basename( __FILE__ ) . ':' . __LINE__ );
+
+            if ( strpos( $web_call_gamedata, 'Disabled' ) )
+            {
+                $game_data_status = 'Enable USB Gamedata';
+
+                @ file_put_contents( 'game_data_status.txt', $game_data_status ) or die ( 'Error: ' . basename( __FILE__ ) . ':' . __LINE__ );
+            }
+
+            if ( strpos( $web_call_gamedata, 'Enabled' ) )
+            {
+                $game_data_status = 'Disable USB Gamedata';
+
+                @ file_put_contents( 'game_data_status.txt', $game_data_status ) or die ( 'Error: ' . basename( __FILE__ ) . ':' . __LINE__ );
+            }
+        }
+        else
+        {
+            $game_data_status = @ file_get_contents( 'game_data_status.txt' ) or die ( 'Error: ' . basename( __FILE__ ) . ':' . __LINE__ );
+
+            @ file_put_contents( 'game_data_status.txt', $game_data_status ) or die ( 'Error: ' . basename( __FILE__ ) . ':' . __LINE__ );
+        }
+    }
+
+    if ( $usb_status == 'OFF' )
+    {
+        $game_data_status = 'NO USB DRIVE';
+
+        @ file_put_contents( 'game_data_status.txt', $game_data_status ) or die ( 'Error: ' . basename( __FILE__ ) . ':' . __LINE__ );
+    }
 
 ?>

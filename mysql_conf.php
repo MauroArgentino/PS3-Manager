@@ -1,14 +1,19 @@
 <?php
 
-// MYSQL Server Details
-$mysql_host = "MYSQL_SERVER_IP";
-$mysql_user = "MYSQL_USER";
-$mysql_password = "MYSQL_PASSWORD";
-$mysql_db = "ps3-games"; //<---- change this only if you want to call the database in a different way
+$database_hostname = 'localhost';
 
-define('DB_USER', $mysql_user);
-    define('DB_PASSWORD', $mysql_password);
-    define('DB_SERVER', $mysql_host);
-    define('DB_NAME', $mysql_db);
+$database_username = 'root';
+
+$database_password = '';
+
+$database_name = 'ps3-games';
+
+defined( 'DATABASE_USERNAME' ) or define( 'DATABASE_USERNAME', $database_username );
+
+defined( 'DATABASE_PASSWORD' ) or define( 'DATABASE_PASSWORD', $database_password );
+
+defined( 'DATABASE_HOSTNAME' ) or define( 'DATABASE_HOSTNAME', $database_hostname );
+
+defined( 'DATABASE_NAME' ) or define( 'DATABASE_NAME', $database_name );
 
 ?>
